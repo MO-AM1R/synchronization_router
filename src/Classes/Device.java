@@ -19,10 +19,12 @@ public class Device extends Thread{
         } catch (InterruptedException e) {
             System.out.println(e.getMessage());
         }
+        Network.logToFile("Connection " + connection + ": " + getName() + " login");
         System.out.println("Connection " + connection + ": " + getName() + " login");
 
         try {
             sleep((long)(Math.random() * 1000));
+            Network.logToFile("Connection " + connection + ": " + getName() + " perform online activity ");
             System.out.println("Connection " + connection + ": " + getName() + " perform online activity ");
         }
         catch (InterruptedException e) {

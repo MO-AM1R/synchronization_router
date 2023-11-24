@@ -1,0 +1,23 @@
+
+---------------------------------------------------
+
+(C1) (Luca) arrived
+(C4) (Omar) arrived
+Connection 1: C1 Occupied
+Connection 2: C4 Occupied
+Connection 1: C1 login
+(C3) (Amit) arrived and waiting
+Connection 2: C4 login
+Connection 1: C1 perform online activity 
+Connection 1: C1 Logged out
+(C2) (Amr) arrived and waiting
+Connection 1: C3 Occupied
+Connection 2: C4 perform online activity 
+Connection 1: C3 login
+Connection 1: C3 perform online activity 
+Connection 1: C3 Logged out
+Connection 1: C2 Occupied
+Connection 2: C4 Logged out
+Connection 1: C2 login
+Connection 1: C2 perform online activity 
+Connection 1: C2 Logged out

@@ -1,5 +1,4 @@
 package Classes;
-
 import static java.lang.Thread.sleep;
 
 public class Router {
@@ -18,7 +17,9 @@ public class Router {
                 ++numberOfConnections ;
                 isConnected[i] = true ;
                 device.setConnection(i + 1) ;
+                Network.logToFile("Connection " + device.getConnection() + ": " + device.getName() + " Occupied");
                 System.out.println("Connection " + device.getConnection() + ": " + device.getName() + " Occupied");
+
                 sleep((long)(Math.random() * 1000));
                 break;
             }
@@ -30,6 +31,7 @@ public class Router {
         --numberOfConnections ;
         isConnected[device.getConnection() - 1] = false ;
         notify();
+        Network.logToFile("Connection " + device.getConnection() + ": " + device.getName() + " Logged out");
         System.out.println("Connection " + device.getConnection() + ": " + device.getName() + " Logged out");
     }
 

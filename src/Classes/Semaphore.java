@@ -19,6 +19,7 @@ public class Semaphore {
         if (value < 0) {
             try {
                 Thread.sleep((long)(Math.random() * 1000));
+                Network.logToFile("(" + device.getName() + ") " + "(" + device.getType() + ") " + "arrived and waiting");
                 System.out.println("(" + device.getName() + ") " + "(" + device.getType() + ") " + "arrived and waiting");
                 wait();
             } catch (InterruptedException e) {
@@ -26,6 +27,7 @@ public class Semaphore {
             }
         }
         else{
+            Network.logToFile("(" + device.getName() + ") " + "(" + device.getType() + ") " + "arrived");
             System.out.println("(" + device.getName() + ") " + "(" + device.getType() + ") " + "arrived");
             try {
                 Thread.sleep((long)(Math.random() * 1000));
