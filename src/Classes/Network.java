@@ -12,6 +12,12 @@ import java.util.Scanner;
 import java.util.Vector;
 
 public class Network {
+    /**
+     *<pre>
+     *Method {@code setFile} to set the file and create it if not exists
+     *if it exists it remove its content
+     *</pre>
+     */
     private static void setFile(){
         try {
             Path path = Paths.get(System.getProperty("user.dir") + "\\out.txt");
@@ -33,6 +39,14 @@ public class Network {
             System.out.println(e.getMessage());
         }
     }
+
+    /**
+     *<pre>
+     *Method {@code logToFile} to add content to the file
+     *</pre>
+     * @param content
+     * <strong style="color:'white'"> represent the content which will add in the file</strong>
+     */
     public static void logToFile(String content){
         try{
             Path path = Paths.get(System.getProperty("user.dir") + "\\out.txt") ;
@@ -43,6 +57,11 @@ public class Network {
         }
     }
 
+    /**
+     *<pre>
+     *The main method {@code main} to run the application
+     *</pre>
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
