@@ -3,38 +3,47 @@ package Classes;
 public class Device extends Thread{
     String type ;
     Router router ;
-    int connection ;
+    int connectionId ;
+
     public Device(String nameOfDevice, String typeOfDevice, Router router) {
         super(nameOfDevice) ;
         type = typeOfDevice ;
         this.router = router ;
-        connection = 1 ;
+        connectionId = 1 ;
+    }
+
+    private void login(){
+        Network.logToFile("Connection " + connectionId + ": " + getName() + " login");
+        System.out.println("Connection " + connectionId + ": " + getName() + " login");
+    }
+
+    private void preformOnlineActivity(){
+        Network.logToFile("Connection " + connectionId + ": " + getName() + " perform online activity ");
+        System.out.println("Connection " + connectionId + ": " + getName() + " perform online activity ");
+    }
+
+    private void logout(){
+        Network.logToFile("Connection " + connectionId + ": " + getName() + " Logged out");
+        System.out.println("Connection " + connectionId + ": " + getName() + " Logged out");
     }
 
     @Override
     synchronized public void run(){
-        router.getSemaphore().decrement(this);
         try {
-            connection = router.occupyConnection(this);
-        } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
-        }
-        Network.logToFile("Connection " + connection + ": " + getName() + " login");
-        System.out.println("Connection " + connection + ": " + getName() + " login");
-
-        try {
+            router.occupyConnection(this);
             sleep((long)(Math.random() * 1000));
-            Network.logToFile("Connection " + connection + ": " + getName() + " perform online activity ");
-            System.out.println("Connection " + connection + ": " + getName() + " perform online activity ");
+
+            login();
+
+            sleep((long)(Math.random() * 1000));
+            preformOnlineActivity();
+
+            sleep((long)(Math.random() * 1000));
+
+            logout();
+            router.releaseConnection(this);
         }
         catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            sleep((long)(Math.random() * 1000));
-            router.releaseConnection(this);
-            router.getSemaphore().increment();
-        } catch (InterruptedException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -43,11 +52,11 @@ public class Device extends Thread{
         return type;
     }
 
-    public int getConnection() {
-        return connection ;
+    public int getConnectionId() {
+        return connectionId ;
     }
 
     public void setConnection(int connection) {
-        this.connection = connection;
+        this.connectionId = connection;
     }
 }

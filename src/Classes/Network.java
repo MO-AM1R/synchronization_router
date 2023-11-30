@@ -1,5 +1,7 @@
 package Classes;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,16 +12,30 @@ import java.util.Scanner;
 import java.util.Vector;
 
 public class Network {
-    public static void logToFile(String content){
-        try{
-            Path path = Paths.get(System.getProperty("user.dir") + "\\out.txt") ;
-            File file = new File(path.toString()) ;
+    private static void setFile(){
+        try {
+            Path path = Paths.get(System.getProperty("user.dir") + "\\out.txt");
+            File file = new File(path.toString());
 
-            if (!file.exists()){
-                if (!file.createNewFile()){
+            if (!file.exists()) {
+                if (!file.createNewFile()) {
                     System.out.println("Error in creating the file");
                 }
             }
+            FileWriter fileWriter = new FileWriter(path.toString()) ;
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter) ;
+
+            bufferedWriter.flush();
+            bufferedWriter.close();
+            fileWriter.close();
+        }
+        catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
+    public static void logToFile(String content){
+        try{
+            Path path = Paths.get(System.getProperty("user.dir") + "\\out.txt") ;
             Files.write(path, (content + '\n').getBytes(), StandardOpenOption.APPEND);
         }
         catch (IOException e){
@@ -45,7 +61,7 @@ public class Network {
             devices.add(new Device(inputs[0], inputs[1], router));
         }
 
-        logToFile("\n---------------------------------------------------\n");
+        setFile() ;
         for (int i = 0; i < totalDevices; i++) {
             devices.get(i).start();
         }

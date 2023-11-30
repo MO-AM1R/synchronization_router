@@ -1,41 +1,30 @@
 package Classes;
-import static java.lang.Thread.sleep;
+import java.util.Arrays;
+import java.util.List;
 
 public class Router {
     private final Semaphore devices ;
-    private int numberOfConnections;
-    private final boolean[] isConnected ;
+    private final List<Boolean> connections;
 
     public Router(int numberOfConnections){
         devices = new Semaphore(numberOfConnections) ;
-        isConnected = new boolean[numberOfConnections] ;
+
+        Boolean[] tempArray = new Boolean[numberOfConnections] ;
+        Arrays.fill(tempArray, false);
+        connections = Arrays.asList(tempArray);
     }
 
-    public synchronized int occupyConnection(Device device) throws InterruptedException {
-        for (int i = 0; i < isConnected.length; i++) {
-            if (!isConnected[i]){
-                ++numberOfConnections ;
-                isConnected[i] = true ;
-                device.setConnection(i + 1) ;
-                Network.logToFile("Connection " + device.getConnection() + ": " + device.getName() + " Occupied");
-                System.out.println("Connection " + device.getConnection() + ": " + device.getName() + " Occupied");
-
-                sleep((long)(Math.random() * 1000));
-                break;
-            }
-        }
-        return device.getConnection();
+    public void occupyConnection(Device device) {
+        devices.decrement(device);
+        int index = connections.indexOf(false) ;
+        connections.set(index, true) ;
+        device.setConnection(index + 1);
+        Network.logToFile("Connection " + device.getConnectionId() + ": " + device.getName() + " Occupied");
+        System.out.println("Connection " + device.getConnectionId() + ": " + device.getName() + " Occupied");
     }
 
-    synchronized public void releaseConnection(Device device){
-        --numberOfConnections ;
-        isConnected[device.getConnection() - 1] = false ;
-        notify();
-        Network.logToFile("Connection " + device.getConnection() + ": " + device.getName() + " Logged out");
-        System.out.println("Connection " + device.getConnection() + ": " + device.getName() + " Logged out");
-    }
-
-    public Semaphore getSemaphore() {
-        return devices;
+    public void releaseConnection(Device device){
+        connections.set(device.getConnectionId() - 1, false);
+        devices.increment();
     }
 }
